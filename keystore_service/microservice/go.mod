@@ -1,6 +1,6 @@
 module test_task_pip.Service/keystore_service/microservice
 
-go 1.22.0
+go 1.18
 
 require github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8
 
