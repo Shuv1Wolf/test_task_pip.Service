@@ -1,0 +1,6 @@
+go 1.22.0
+
+use (
+	D:\go_path\src\test-task-pip.service\keystore_service\client
+	D:\go_path\src\test-task-pip.service\keystore_service\microservice
+)

@@ -9,9 +9,9 @@ import (
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
 	"github.com/stretchr/testify/assert"
-	data1 "test_task_pip.Service/keystore_service/microservice/data/version1"
-	"test_task_pip.Service/keystore_service/microservice/logic"
-	"test_task_pip.Service/keystore_service/microservice/persistence"
+	data1 "test-task-pip.service/keystore_service/microservice/data/version1"
+	"test-task-pip.service/keystore_service/microservice/logic"
+	"test-task-pip.service/keystore_service/microservice/persistence"
 )
 
 type keyControllerTest struct {

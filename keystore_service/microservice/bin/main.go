@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"test_task_pip.Service/keystore_service/microservice/containers"
+	"test-task-pip.service/keystore_service/microservice/containers"
 )
 
 func main() {

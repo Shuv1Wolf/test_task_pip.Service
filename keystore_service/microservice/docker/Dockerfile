@@ -10,10 +10,10 @@ COPY ./exe ./bin
 COPY ./config ./config
 
 # Set environment variables
-ENV HTTP_PORT=8080
+ENV HTTP_PORT=8081
 
 # Expose the port
-EXPOSE "8080:8080"
+EXPOSE "8081:8081"
 
 # Specify the command to run
 CMD ["./bin/app"]

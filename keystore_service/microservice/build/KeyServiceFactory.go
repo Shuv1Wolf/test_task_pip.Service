@@ -3,9 +3,9 @@ package build
 import (
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
 	cbuild "github.com/pip-services3-gox/pip-services3-components-gox/build"
-	"test_task_pip.Service/keystore_service/microservice/logic"
-	"test_task_pip.Service/keystore_service/microservice/persistence"
-	service1 "test_task_pip.Service/keystore_service/microservice/service/version1"
+	"test-task-pip.service/keystore_service/microservice/logic"
+	"test-task-pip.service/keystore_service/microservice/persistence"
+	service1 "test-task-pip.service/keystore_service/microservice/service/version1"
 )
 
 type KeyServiceFactory struct {

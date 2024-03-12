@@ -4,7 +4,7 @@ import (
 	"context"
 
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
-	data1 "test_task_pip.Service/keystore_service/microservice/data/version1"
+	data1 "test-task-pip.service/keystore_service/microservice/data/version1"
 )
 
 type IKeyPersistence interface {

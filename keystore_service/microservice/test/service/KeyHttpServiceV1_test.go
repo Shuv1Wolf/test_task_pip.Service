@@ -11,10 +11,10 @@ import (
 	cclients "github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
 	tclients "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
 	"github.com/stretchr/testify/assert"
-	data1 "test_task_pip.Service/keystore_service/microservice/data/version1"
-	"test_task_pip.Service/keystore_service/microservice/logic"
-	"test_task_pip.Service/keystore_service/microservice/persistence"
-	service1 "test_task_pip.Service/keystore_service/microservice/service/version1"
+	data1 "test-task-pip.service/keystore_service/microservice/data/version1"
+	"test-task-pip.service/keystore_service/microservice/logic"
+	"test-task-pip.service/keystore_service/microservice/persistence"
+	service1 "test-task-pip.service/keystore_service/microservice/service/version1"
 )
 
 type keyHttpServiceV1Test struct {

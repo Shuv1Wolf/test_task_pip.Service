@@ -1,8 +1,11 @@
-module test_task_pip.Service/keystore_service/microservice
+module test-task-pip.service/keystore_service/microservice
 
 go 1.18
 
-require github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8
+require (
+	github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8
+	github.com/pip-services3-gox/pip-services3-components-gox v1.0.7
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -11,7 +14,6 @@ require (
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/jinzhu/copier v0.3.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.15 // indirect
-	github.com/pip-services3-gox/pip-services3-components-gox v1.0.7 // indirect
 	github.com/pip-services3-gox/pip-services3-data-gox v1.0.7 // indirect
 	github.com/pip-services3-gox/pip-services3-expressions-gox v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

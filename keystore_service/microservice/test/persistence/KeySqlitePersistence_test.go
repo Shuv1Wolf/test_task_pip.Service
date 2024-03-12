@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
-	"test_task_pip.Service/keystore_service/microservice/persistence"
+	"test-task-pip.service/keystore_service/microservice/persistence"
 )
 
 type KeySqlitePersistenceTest struct {
@@ -69,4 +69,5 @@ func TestKeySqlitePersistence(t *testing.T) {
 
 	c.setup(t)
 	t.Run("WithFilters", c.fixture.TestGetWithFilters)
+	c.teardown(t)
 }

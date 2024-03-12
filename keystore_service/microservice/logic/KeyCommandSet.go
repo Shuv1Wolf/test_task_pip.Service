@@ -8,7 +8,7 @@ import (
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
-	data1 "test_task_pip.Service/keystore_service/microservice/data/version1"
+	data1 "test-task-pip.service/keystore_service/microservice/data/version1"
 )
 
 type KeyCommandSet struct {

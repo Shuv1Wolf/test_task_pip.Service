@@ -5,7 +5,7 @@ import (
 	rbuild "github.com/pip-services3-gox/pip-services3-rpc-gox/build"
 	sqlite "github.com/pip-services3-gox/pip-services3-sqlite-gox/build"
 	cswagger "github.com/pip-services3-gox/pip-services3-swagger-gox/build"
-	"test_task_pip.Service/keystore_service/microservice/build"
+	"test-task-pip.service/keystore_service/microservice/build"
 )
 
 type KeyProcess struct {
