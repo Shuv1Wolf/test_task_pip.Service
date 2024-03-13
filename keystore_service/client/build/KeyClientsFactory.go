@@ -1,9 +1,9 @@
 package build
 
 import (
-	bclients "github.com/pip-services-samples/client-beacons-gox/clients/version1"
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
 	cbuild "github.com/pip-services3-gox/pip-services3-components-gox/build"
+	clients1 "test-task-pip.service/keystore_service/client/clients/version1"
 )
 
 type KeyClientFactory struct {
@@ -22,9 +22,9 @@ func NewKeyClientFactory() *KeyClientFactory {
 	bcf.DirectClientDescriptor = cref.NewDescriptor("key", "client", "direct", "*", "1.0")
 	bcf.HttpClientDescriptor = cref.NewDescriptor("key", "client", "http", "*", "1.0")
 
-	bcf.RegisterType(bcf.NullClientDescriptor, bclients.NewBeaconsNullClientV1)
-	bcf.RegisterType(bcf.DirectClientDescriptor, bclients.NewBeaconsDirectClientV1)
-	bcf.RegisterType(bcf.HttpClientDescriptor, bclients.NewBeaconsHttpClientV1)
+	bcf.RegisterType(bcf.NullClientDescriptor, clients1.NewKeyNullClentV1)
+	bcf.RegisterType(bcf.DirectClientDescriptor, clients1.NewKeyDirectClientV1)
+	bcf.RegisterType(bcf.HttpClientDescriptor, clients1.NewKeyHttpClientV1)
 
 	return &bcf
 }

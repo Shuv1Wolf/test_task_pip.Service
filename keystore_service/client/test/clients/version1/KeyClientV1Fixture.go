@@ -70,7 +70,6 @@ func (c *KeyClientV1Fixture) testCreateKeys(t *testing.T) data1.KeyV1 {
 }
 
 func (c *KeyClientV1Fixture) TestCrudOperations(t *testing.T) {
-	// Create items
 	var key1 data1.KeyV1
 
 	// Create items
