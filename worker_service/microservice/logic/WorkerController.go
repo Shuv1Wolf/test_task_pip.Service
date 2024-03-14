@@ -126,14 +126,6 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 
 		genString := generateAndSleep() // генерация рандомного числа и сон
 
-		updateJob, err = c.jobClient.UpdateInCompleted(ctx, correlationId, job.Id, job.Owner)
-		if err != nil {
-			return
-		}
-		if updateJob.Id == "" {
-			return
-		}
-
 		key := data1Key.KeyV1{
 			Id:    job.Id,
 			Owner: job.Owner,
@@ -151,12 +143,20 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 			return
 		}
 
+		updateJob, err = c.jobClient.UpdateInCompleted(ctx, correlationId, job.Id, job.Owner)
+		if err != nil {
+			return
+		}
+		if updateJob.Id == "" {
+			return
+		}
+
 		updateWorker = c.persistence.UpdateWorker(ctx, correlationId, data1Worker.Waiting, data1Worker.NoWork)
 		if updateWorker.Id == "" {
 			return
 		}
 
-	}, 10000, 0, 1)
+	}, 15000, 0, 1)
 
 	c.timer.Start(ctx)
 
