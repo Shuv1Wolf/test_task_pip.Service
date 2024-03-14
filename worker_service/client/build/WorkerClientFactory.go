@@ -6,16 +6,16 @@ import (
 	"test-task-pip.service/worker_service/client/clients"
 )
 
-type KeyClientFactory struct {
+type WorkerClientFactory struct {
 	cbuild.Factory
 	// NullClientDescriptor   *cref.Descriptor
 	// DirectClientDescriptor *cref.Descriptor
 	HttpClientDescriptor *cref.Descriptor
 }
 
-func NewKeyClientFactory() *KeyClientFactory {
+func NewKeyClientFactory() *WorkerClientFactory {
 
-	bcf := KeyClientFactory{}
+	bcf := WorkerClientFactory{}
 	bcf.Factory = *cbuild.NewFactory()
 
 	// bcf.NullClientDescriptor = cref.NewDescriptor("worker", "client", "null", "*", "1.0")
