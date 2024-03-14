@@ -18,4 +18,5 @@ type IJobController interface {
 
 	UpdateInProgress(ctx context.Context, correlationId string, id string, owner string) (data1.JobV1, error)
 	UpdateInCompleted(ctx context.Context, correlationId string, id string, owner string) (data1.JobV1, error)
+	UpdateInNotStarted(ctx context.Context, correlationId string, id string, owner string) (data1.JobV1, error)
 }

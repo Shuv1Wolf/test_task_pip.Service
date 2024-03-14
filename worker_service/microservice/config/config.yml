@@ -1,8 +1,8 @@
 ---
 # Container descriptor
 - descriptor: "pip-services:context-info:default:default:1.0"
-  name: "job"
-  description: "Job microservice"
+  name: "worker"
+  description: "worker microservice"
 
 # Console logger
 - descriptor: "pip-services:logger:console:default:1.0"
@@ -14,28 +14,32 @@
 # Performance counters that post values to log
 - descriptor: "pip-services:counters:log:default:1.0"
 
-#Sqlite persistence
-- descriptor: job:persistence:sqlite:default:1.0
-  connection:
-    database: {{SQLITE_DB}}{{#unless SQLITE_DB}}./temp/storage.db{{/unless}}
+# Worker persistence
+- descriptor: worker:persistence:default:default:1.0
 
 # Controller
-- descriptor: "job:controller:default:default:1.0"
+- descriptor: "worker:controller:default:default:1.0"
 
 # Shared HTTP Endpoint
 - descriptor: "pip-services:endpoint:http:default:1.0"
   connection:
     protocol: http
     host: 0.0.0.0
-    port: {{HTTP_PORT}}{{#unless HTTP_PORT}}8082{{/unless}}
+    port: {{HTTP_PORT}}{{#unless HTTP_PORT}}8083{{/unless}}
 
 # Swagger Service
 - descriptor: "pip-services:swagger-service:http:default:1.0"
 
 # HTTP Service V1
-- descriptor: "job:service:http:default:1.0"
+- descriptor: "worker:service:http:default:1.0"
   swagger:
     enable: true
+
+# HTTP Client Job
+- descriptor: "job:client:http:default:1.0"
+
+# HTTP Client Key
+- descriptor: "key:client:http:default:1.0"
 
 # Hearbeat service
 - descriptor: "pip-services:heartbeat-service:http:default:1.0"

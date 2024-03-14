@@ -30,6 +30,7 @@ func NewJobCommandSet(controller IJobController) *JobCommandSet {
 	c.AddCommand(c.makeUpdateInProgressCommand())
 	c.AddCommand(c.makeUpdateInCompletedCommand())
 	c.AddCommand(c.makeGetJobByStatusCommand())
+	c.AddCommand(c.makeUpdateNotStartedCommand())
 
 	return c
 }
@@ -97,6 +98,17 @@ func (c *JobCommandSet) makeUpdateInProgressCommand() ccmd.ICommand {
 func (c *JobCommandSet) makeUpdateInCompletedCommand() ccmd.ICommand {
 	return ccmd.NewCommand(
 		"update_in_completed",
+		cvalid.NewObjectSchema().
+			WithRequiredProperty("job_id", cconv.String).
+			WithRequiredProperty("owner", cconv.String),
+		func(ctx context.Context, correlationId string, args *crun.Parameters) (any, error) {
+			return c.controller.UpdateInCompleted(ctx, correlationId, args.GetAsString("job_id"), args.GetAsString("owner"))
+		})
+}
+
+func (c *JobCommandSet) makeUpdateNotStartedCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
+		"update_not_started",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("job_id", cconv.String).
 			WithRequiredProperty("owner", cconv.String),

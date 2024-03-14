@@ -90,3 +90,13 @@ func (c *JobController) UpdateInCompleted(ctx context.Context, correlationId str
 	}
 	return c.persistence.Update(ctx, correlationId, job)
 }
+
+func (c *JobController) UpdateInNotStarted(ctx context.Context, correlationId string,
+	id string, owner string) (data1.JobV1, error) {
+	job := data1.JobV1{
+		Id:     id,
+		Owner:  owner,
+		Status: data1.NotStarted,
+	}
+	return c.persistence.Update(ctx, correlationId, job)
+}
