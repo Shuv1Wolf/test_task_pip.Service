@@ -3,7 +3,7 @@ package build
 import (
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
 	cbuild "github.com/pip-services3-gox/pip-services3-components-gox/build"
-	"test-task-pip.service/worker_service/client/clients"
+	clients1 "test-task-pip.service/worker_service/client/clients/version1"
 )
 
 type WorkerClientFactory struct {
@@ -13,7 +13,7 @@ type WorkerClientFactory struct {
 	HttpClientDescriptor *cref.Descriptor
 }
 
-func NewKeyClientFactory() *WorkerClientFactory {
+func NewWorkerClientFactory() *WorkerClientFactory {
 
 	bcf := WorkerClientFactory{}
 	bcf.Factory = *cbuild.NewFactory()
@@ -24,7 +24,7 @@ func NewKeyClientFactory() *WorkerClientFactory {
 
 	// bcf.RegisterType(bcf.NullClientDescriptor, clients1.NewKeyNullClentV1)
 	// bcf.RegisterType(bcf.DirectClientDescriptor, clients1.NewKeyDirectClientV1)
-	bcf.RegisterType(bcf.HttpClientDescriptor, clients.NewWorkerHttpClientV1)
+	bcf.RegisterType(bcf.HttpClientDescriptor, clients1.NewWorkerHttpClientV1)
 
 	return &bcf
 }

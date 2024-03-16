@@ -40,5 +40,6 @@ require (
 require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/pip-services-samples/client-beacons-gox v0.0.0-20220902065533-01d728fd7d8e
+	github.com/pip-services3-go/pip-services3-commons-go v1.1.6
 	github.com/pip-services3-gox/pip-services3-rpc-gox v1.0.8
 )

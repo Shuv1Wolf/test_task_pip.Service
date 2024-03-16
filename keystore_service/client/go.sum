@@ -95,6 +95,8 @@ github.com/pip-services-samples/client-beacons-gox v0.0.0-20220902065533-01d728f
 github.com/pip-services-samples/client-beacons-gox v0.0.0-20220902065533-01d728fd7d8e/go.mod h1:LSf1jjSTnCJCUhrt+HHt8i2I4LiNO50vwYu0Zv3vwpA=
 github.com/pip-services-samples/service-beacons-gox v0.0.0-20220817181407-1a3fe6124647 h1:pw/c1rkyqGWlY6VtfcNNX0s1D3zcmaqrd8CQRebZhmg=
 github.com/pip-services-samples/service-beacons-gox v0.0.0-20220817181407-1a3fe6124647/go.mod h1:SEjIwkW9H8ST1U2q6c1mX/Yw46zsnr5QJ1LVftseCXI=
+github.com/pip-services3-go/pip-services3-commons-go v1.1.6 h1:oBmbt/Ycsq5TdYWTqtwnEy01cVYtWwjrR/7kDD3SmBQ=
+github.com/pip-services3-go/pip-services3-commons-go v1.1.6/go.mod h1:733VaqhMsxgzJUeMB9Vuo2okd8dJPzPEGiOk/aokdNQ=
 github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8 h1:FNbEQ+kA8r3vijyB0aZqzmRBBSvHV4sIdcZqoHrDqqg=
 github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8/go.mod h1:XOODsMiG196E8/Uo4tRDqjHH3bGZ9ZfcZhKS+BSznOY=
 github.com/pip-services3-gox/pip-services3-components-gox v1.0.7 h1:tro7B7/LqjHYRHL1TtjEt1Mswj8OeOrlgSyqPIpCh+Q=

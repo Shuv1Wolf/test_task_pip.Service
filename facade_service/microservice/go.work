@@ -1,0 +1,9 @@
+go 1.22.0
+
+use (
+	.
+	..\..\jobs_service\microservice
+	..\..\keystore_service\microservice
+	..\..\worker_service\client
+	..\..\worker_service\microservice
+)

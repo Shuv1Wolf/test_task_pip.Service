@@ -1,0 +1,3 @@
+github.com/pip-services3-gox/pip-services3-expressions-gox v1.0.2/go.mod h1:9CgwsKPu8vjdcnHsv1lTZARo3JtoLZLshGM6VRRAif4=
+github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/8L+MA=
+github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=

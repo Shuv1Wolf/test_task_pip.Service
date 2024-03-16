@@ -1,0 +1,34 @@
+# Container info
+- descriptor: "pip-services:container-info:default:default:*"
+  name: "facade"
+  description: "Key facade on Golang"
+
+# Console logger
+- descriptor: "pip-services:logger:console:default:*"
+  level: trace
+
+# Tracer that posts records to log
+- descriptor: "pip-services:tracer:log:default:1.0"
+
+# Performance counters that post values to log
+- descriptor: "pip-services:counters:log:default:1.0"
+
+# Log counters
+- descriptor: "pip-services:counters:log:default:*"
+
+# Main facade service
+- descriptor: "pip-services:endpoint:http:default:*"
+  root_path: ""
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: 8084
+
+# Facade API V1
+- descriptor: "facade:service:http:default:1.0"
+
+# Hearbeat service
+- descriptor: "pip-services:heartbeat-service:http:default:1.0"
+
+# Status service
+- descriptor: "pip-services:status-service:http:default:1.0"
