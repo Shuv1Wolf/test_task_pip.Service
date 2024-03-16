@@ -8,6 +8,7 @@ import (
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cclients "github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
 	tclients "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
 	"github.com/stretchr/testify/assert"
 	data1 "test-task-pip.service/jobs_service/microservice/data/version1"
@@ -129,6 +130,8 @@ func (c *jobHttpServiceV1Test) teardown(t *testing.T) {
 }
 
 func (c *jobHttpServiceV1Test) testCrudOperations(t *testing.T) {
+	var job1 data1.JobV1
+
 	params := cdata.NewAnyValueMapFromTuples(
 		"job_id", "4",
 		"owner", "Robert",
@@ -137,6 +140,70 @@ func (c *jobHttpServiceV1Test) testCrudOperations(t *testing.T) {
 	response, err := c.client.CallCommand(context.Background(), "create_job", "", params)
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
+
+	job, err := cclients.HandleHttpResponse[data1.JobV1](response, "")
+	assert.Nil(t, err)
+	assert.NotEqual(t, data1.JobV1{}, job)
+	assert.Equal(t, data1.NotStarted, job.Status)
+	assert.Equal(t, "Robert", job.Owner)
+
+	params = cdata.NewAnyValueMapFromTuples(
+		"filter", cdata.NewEmptyFilterParams(),
+		"paging", cdata.NewEmptyFilterParams(),
+	)
+	response, err = c.client.CallCommand(context.Background(), "get_jobs", "", params)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+
+	page, err := cclients.HandleHttpResponse[cdata.DataPage[data1.JobV1]](response, "")
+	assert.Nil(t, err)
+	assert.True(t, page.HasData())
+	job1 = page.Data[0].Clone()
+
+	response, err = c.client.CallCommand(context.Background(), "get_not_started_job", "", params)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+
+	job, err = cclients.HandleHttpResponse[data1.JobV1](response, "")
+	assert.Nil(t, err)
+	assert.NotEqual(t, data1.JobV1{}, job)
+	assert.Equal(t, data1.NotStarted, job.Status)
+
+	params = cdata.NewAnyValueMapFromTuples(
+		"job_id", job1.Id,
+		"owner", job1.Owner,
+	)
+	response, err = c.client.CallCommand(context.Background(), "update_in_progress", "", params)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+	job, err = cclients.HandleHttpResponse[data1.JobV1](response, "")
+	assert.Nil(t, err)
+	assert.NotEqual(t, data1.JobV1{}, job)
+	assert.Equal(t, data1.Progress, job.Status)
+
+	params = cdata.NewAnyValueMapFromTuples(
+		"status", data1.Progress,
+	)
+	response, err = c.client.CallCommand(context.Background(), "get_jobs_by_status", "", params)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+	page, err = cclients.HandleHttpResponse[cdata.DataPage[data1.JobV1]](response, "")
+	assert.Nil(t, err)
+	assert.NotEqual(t, data1.JobV1{}, job)
+	assert.Len(t, page.Data, 1)
+
+	params = cdata.NewAnyValueMapFromTuples(
+		"job_id", job1.Id,
+		"owner", job1.Owner,
+	)
+	response, err = c.client.CallCommand(context.Background(), "update_in_completed", "", params)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+	job, err = cclients.HandleHttpResponse[data1.JobV1](response, "")
+	assert.Nil(t, err)
+	assert.NotEqual(t, data1.JobV1{}, job)
+	assert.Equal(t, data1.Completed, job.Status)
+
 }
 
 func TestJovCommmandableHttpServiceV1(t *testing.T) {

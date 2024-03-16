@@ -38,8 +38,6 @@ func (c *FacadeServiceV1) SetReferences(references cref.IReferences) {
 }
 
 func (c *FacadeServiceV1) Register() {
-
-	// Restore session middleware
 	c.RegisterOpenApiSpec("")
 
 	c.registerContentManagementRoutes()
