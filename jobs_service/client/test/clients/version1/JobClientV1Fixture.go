@@ -118,7 +118,7 @@ func (c *JobClientV1Fixture) TestGetWithFilters(t *testing.T) {
 	c.testCreateJobs(t)
 
 	filter := *cdata.NewFilterParamsFromTuples(
-		"id", "1",
+		"id", "5",
 	)
 	// Filter by id
 	page, err := c.client.GetJobs(context.Background(), "",

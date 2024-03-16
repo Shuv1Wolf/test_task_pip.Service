@@ -10,19 +10,17 @@ import (
 	clients1 "test-task-pip.service/jobs_service/client/clients/version1"
 	"test-task-pip.service/jobs_service/microservice/logic"
 	"test-task-pip.service/jobs_service/microservice/persistence"
-	service1 "test-task-pip.service/jobs_service/microservice/service/version1"
 )
 
-type jobCommandableHttpClientV1Test struct {
+type jobDirectClientV1Test struct {
 	persistence *persistence.JobSqlitePersistence
 	controller  *logic.JobController
-	service     *service1.JobHttpServiceV1
-	client      *clients1.JobHttpClientV1
+	client      *clients1.JobDirectClientV1
 	fixture     *JobClientV1Fixture
 	ctx         context.Context
 }
 
-func newJobHttpClientV1Test() *jobCommandableHttpClientV1Test {
+func newBeaconsDirectClientV1Test() *jobDirectClientV1Test {
 	sqliteDatabase := os.Getenv("SQLITE_DB")
 	if sqliteDatabase == "" {
 		sqliteDatabase = "D:/go_path/src/test-task-pip.service/jobs_service/microservice/temp/storage.db"
@@ -42,49 +40,32 @@ func newJobHttpClientV1Test() *jobCommandableHttpClientV1Test {
 
 	controller := logic.NewJobController()
 
-	httpConfig := cconf.NewConfigParamsFromTuples(
-		"connection.protocol", "http",
-		"connection.port", "8082",
-		"connection.host", "localhost",
-	)
-
-	service := service1.NewJobHttpServiceV1()
-	service.Configure(ctx, httpConfig)
-
-	client := clients1.NewJobHttpClientV1()
-	client.Configure(ctx, httpConfig)
+	client := clients1.NewJobDirectClientV1()
+	client.Configure(ctx, cconf.NewEmptyConfigParams())
 
 	references := cref.NewReferencesFromTuples(ctx,
 		cref.NewDescriptor("job", "persistence", "memory", "default", "1.0"), persistence,
 		cref.NewDescriptor("job", "controller", "default", "default", "1.0"), controller,
-		cref.NewDescriptor("job", "service", "http", "default", "1.0"), service,
-		cref.NewDescriptor("job", "client", "http", "default", "1.0"), client,
+		cref.NewDescriptor("job", "client", "direct", "default", "1.0"), client,
 	)
 	controller.SetReferences(ctx, references)
-	service.SetReferences(ctx, references)
 	client.SetReferences(ctx, references)
 
 	fixture := NewjobClientV1Fixture(client)
 
-	return &jobCommandableHttpClientV1Test{
+	return &jobDirectClientV1Test{
 		persistence: persistence,
 		controller:  controller,
-		service:     service,
 		client:      client,
 		fixture:     fixture,
 		ctx:         ctx,
 	}
 }
 
-func (c *jobCommandableHttpClientV1Test) setup(t *testing.T) {
+func (c *jobDirectClientV1Test) setup(t *testing.T) {
 	err := c.persistence.Open(c.ctx, "")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
-	}
-
-	err = c.service.Open(c.ctx, "")
-	if err != nil {
-		t.Error("Failed to open service", err)
 	}
 
 	err = c.client.Open(c.ctx, "")
@@ -98,15 +79,10 @@ func (c *jobCommandableHttpClientV1Test) setup(t *testing.T) {
 	}
 }
 
-func (c *jobCommandableHttpClientV1Test) teardown(t *testing.T) {
+func (c *jobDirectClientV1Test) teardown(t *testing.T) {
 	err := c.client.Close(c.ctx, "")
 	if err != nil {
 		t.Error("Failed to close client", err)
-	}
-
-	err = c.service.Close(c.ctx, "")
-	if err != nil {
-		t.Error("Failed to close service", err)
 	}
 
 	err = c.persistence.Close(c.ctx, "")
@@ -115,8 +91,8 @@ func (c *jobCommandableHttpClientV1Test) teardown(t *testing.T) {
 	}
 }
 
-func TestJobHttpClientV1(t *testing.T) {
-	c := newJobHttpClientV1Test()
+func TestBeaconsDirectClientV1(t *testing.T) {
+	c := newBeaconsDirectClientV1Test()
 
 	c.setup(t)
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
