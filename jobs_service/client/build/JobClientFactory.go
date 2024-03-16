@@ -8,9 +8,9 @@ import (
 
 type JobClientFactory struct {
 	cbuild.Factory
-	// NullClientDescriptor   *cref.Descriptor
-	// DirectClientDescriptor *cref.Descriptor
-	HttpClientDescriptor *cref.Descriptor
+	NullClientDescriptor   *cref.Descriptor
+	DirectClientDescriptor *cref.Descriptor
+	HttpClientDescriptor   *cref.Descriptor
 }
 
 func NewJobClientFactory() *JobClientFactory {
@@ -18,11 +18,13 @@ func NewJobClientFactory() *JobClientFactory {
 	bcf := JobClientFactory{}
 	bcf.Factory = *cbuild.NewFactory()
 
-	// bcf.NullClientDescriptor = cref.NewDescriptor("job", "client", "null", "*", "1.0")
-	// bcf.DirectClientDescriptor = cref.NewDescriptor("job", "client", "direct", "*", "1.0")
+	bcf.NullClientDescriptor = cref.NewDescriptor("job", "client", "null", "*", "1.0")
+	bcf.DirectClientDescriptor = cref.NewDescriptor("job", "client", "direct", "*", "1.0")
 	bcf.HttpClientDescriptor = cref.NewDescriptor("job", "client", "http", "*", "1.0")
 
 	bcf.RegisterType(bcf.HttpClientDescriptor, clients1.NewJobHttpClientV1)
+	bcf.RegisterType(bcf.DirectClientDescriptor, clients1.NewJobDirectClientV1)
+	bcf.RegisterType(bcf.NullClientDescriptor, clients1.NewJobNullClentV1)
 
 	return &bcf
 }

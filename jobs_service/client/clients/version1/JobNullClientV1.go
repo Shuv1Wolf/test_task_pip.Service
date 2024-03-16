@@ -10,7 +10,7 @@ import (
 type JobNullClientV1 struct {
 }
 
-func NewKeyNullClentV1() *JobNullClientV1 {
+func NewJobNullClentV1() *JobNullClientV1 {
 	return &JobNullClientV1{}
 }
 
