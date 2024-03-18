@@ -67,6 +67,8 @@ func (c *FacadeServiceV1) registerContentManagementRoutes() {
 		func(res http.ResponseWriter, req *http.Request) { c.keysOperations.DeleteKeyById(res, req) })
 
 	// Jobs routes
+	c.RegisterRoute("post", "/jobs/create", nil,
+		func(res http.ResponseWriter, req *http.Request) { c.jobOperations.CreateJob(res, req) })
 	c.RegisterRoute("get", "/jobs/get_jobs", nil,
 		func(res http.ResponseWriter, req *http.Request) { c.jobOperations.GetJobs(res, req) })
 	c.RegisterRoute("get", "/jobs/get_not_started_jobs", nil,

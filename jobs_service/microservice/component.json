@@ -1,0 +1,6 @@
+{
+    "name": "job_service",
+    "registry": "job:8082",
+    "version": "1.0.0",
+    "build": "0"
+}

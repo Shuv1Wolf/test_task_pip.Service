@@ -1,6 +1,6 @@
 module test-task-pip.service/keystore_service/client
 
-go 1.22.0
+go 1.21
 
 require github.com/pip-services3-gox/pip-services3-commons-gox v1.0.8
 

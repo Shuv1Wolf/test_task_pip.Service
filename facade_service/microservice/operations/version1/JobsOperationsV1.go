@@ -89,3 +89,19 @@ func (c *JobsOperationsV1) GetProgressJobs(res http.ResponseWriter, req *http.Re
 		c.SendResult(res, req, key, nil)
 	}
 }
+
+func (c *JobsOperationsV1) CreateJob(res http.ResponseWriter, req *http.Request) {
+	c.jobsClient.Open(context.Background(), c.correlationId)
+	defer c.jobsClient.Close(context.Background(), c.correlationId)
+
+	id := c.GetParam(req, "id")
+
+	owner := c.GetParam(req, "owner")
+
+	item, err := c.jobsClient.CreateJob(context.Background(), c.correlationId, id, owner)
+	if err != nil {
+		c.SendError(res, req, err)
+	} else {
+		c.SendResult(res, req, item, nil)
+	}
+}

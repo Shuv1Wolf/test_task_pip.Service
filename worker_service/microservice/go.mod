@@ -1,6 +1,6 @@
 module test-task-pip.service/worker_service/microservice
 
-go 1.22.0
+go 1.21
 
 require github.com/stretchr/testify v1.9.0
 

@@ -1,6 +1,6 @@
 {
-    "name": "key",
-    "registry": "key:5000",
+    "name": "key_store",
+    "registry": "key:8081",
     "version": "1.0.0",
     "build": "0"
 }

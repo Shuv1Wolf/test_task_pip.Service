@@ -1,6 +1,6 @@
 module test-task-pip.service/facade_service/microservice
 
-go 1.22.0
+go 1.21
 
 require github.com/pip-services3-go/pip-services3-rpc-go v1.6.6
 

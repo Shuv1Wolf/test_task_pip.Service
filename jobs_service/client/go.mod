@@ -1,6 +1,6 @@
 module test-task-pip.service/jobs_service/client
 
-go 1.22.0
+go 1.21
 
 require github.com/pip-services-samples/client-beacons-gox v0.0.0-20220902065533-01d728fd7d8e
 

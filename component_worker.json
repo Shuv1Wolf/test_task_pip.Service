@@ -1,0 +1,6 @@
+{
+    "name": "worker_service",
+    "registry": "worker:8083",
+    "version": "1.0.0",
+    "build": "0"
+}
