@@ -7,61 +7,56 @@ import (
 	"time"
 
 	ccmd "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
-	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
 	"github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	data1 "test-task-pip.service/jobs_service/microservice/data/version1"
 	data1Key "test-task-pip.service/keystore_service/microservice/data/version1"
 	clients1 "test-task-pip.service/worker_service/microservice/clients/version1"
 	data1Worker "test-task-pip.service/worker_service/microservice/data/version1"
-	"test-task-pip.service/worker_service/microservice/persistence"
+	workerPersist "test-task-pip.service/worker_service/microservice/persistence"
 )
 
 type WorkerController struct {
-	persistence persistence.IWorkerPersistence
-	commandSet  *WorkerCommandSet
-	timer       run.FixedRateTimer
-	jobClient   *clients1.JobHttpClientV1
-	keyClient   *clients1.KeyHttpClientV1
+	workerPersist workerPersist.IWorkerPersistence
+	commandSet    *WorkerCommandSet
+	timer         run.FixedRateTimer
+	jobClient     clients1.IJobClientV1
+	keyClient     clients1.IKeyClientV1
 }
 
 func NewWorkerController() *WorkerController {
+	c := &WorkerController{}
 
-	jobHttpConfig := cconf.NewConfigParamsFromTuples(
-		"connection.protocol", "http",
-		"connection.port", "8082",
-		"connection.host", "localhost",
-	)
-
-	keyHttpConfig := cconf.NewConfigParamsFromTuples(
-		"connection.protocol", "http",
-		"connection.port", "8081",
-		"connection.host", "localhost",
-	)
-
-	jobClient := clients1.NewJobHttpClientV1()
-	jobClient.Configure(context.Background(), jobHttpConfig)
-
-	keyClient := clients1.NewKeyHttpClientV1()
-	keyClient.Configure(context.Background(), keyHttpConfig)
-
-	c := &WorkerController{
-		jobClient: jobClient,
-		keyClient: keyClient,
-	}
 	return c
 }
 
 func (c *WorkerController) SetReferences(ctx context.Context, references cref.IReferences) {
-	locator := cref.NewDescriptor("worker", "persistence", "default", "*", "1.0")
-	p, err := references.GetOneRequired(locator)
+	workerLocator := cref.NewDescriptor("worker", "persistence", "default", "*", "1.0")
+	p, err := references.GetOneRequired(workerLocator)
 	if p != nil && err == nil {
-		if _pers, ok := p.(persistence.IWorkerPersistence); ok {
-			c.persistence = _pers
+		if _pers, ok := p.(workerPersist.IWorkerPersistence); ok {
+			c.workerPersist = _pers
+		}
+	}
+
+	jobLocator := cref.NewDescriptor("job", "client", "*", "*", "1.0")
+	p, err = references.GetOneRequired(jobLocator)
+	if p != nil && err == nil {
+		if _client, ok := p.(clients1.IJobClientV1); ok {
+			c.jobClient = _client
+		}
+	}
+
+	keyLocator := cref.NewDescriptor("key", "client", "*", "*", "1.0")
+	p, err = references.GetOneRequired(keyLocator)
+	if p != nil && err == nil {
+		if _client, ok := p.(clients1.IKeyClientV1); ok {
+			c.keyClient = _client
 			return
 		}
 	}
-	panic(cref.NewReferenceError("worker.controller.SetReferences", locator))
+
+	panic(cref.NewReferenceError("worker.controller.SetReferences", fmt.Sprintf("%s or %s or %s", workerLocator, jobLocator, keyLocator)))
 }
 
 func (c *WorkerController) GetCommandSet() *ccmd.CommandSet {
@@ -92,16 +87,12 @@ func generateAndSleep() string {
 // TODO:
 func (c *WorkerController) Start(ctx context.Context, correlationId string) (status string, err error) {
 
-	updateWorker := c.persistence.UpdateWorker(ctx, correlationId, data1Worker.Waiting, data1Worker.NoWork)
+	updateWorker := c.workerPersist.UpdateWorker(ctx, correlationId, data1Worker.Waiting, data1Worker.NoWork)
 	if updateWorker.Id == "" {
 		return
 	}
 
 	c.timer = *run.NewFixedRateTimerFromCallback(func(ctx context.Context) {
-
-		c.jobClient.Open(ctx, correlationId)
-		defer c.jobClient.Close(ctx, correlationId)
-
 		job, err := c.jobClient.GetNotStartedJob(ctx, correlationId)
 		if err != nil {
 			return
@@ -118,7 +109,7 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 			return
 		}
 
-		updateWorker = c.persistence.UpdateWorker(ctx, correlationId, data1Worker.Working,
+		updateWorker = c.workerPersist.UpdateWorker(ctx, correlationId, data1Worker.Working,
 			fmt.Sprintf("%s%s", job.Id, job.Owner))
 		if updateWorker.Id == "" {
 			return
@@ -131,9 +122,6 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 			Owner: job.Owner,
 			Key:   genString,
 		}
-
-		c.keyClient.Open(ctx, correlationId)
-		defer c.keyClient.Close(ctx, correlationId)
 
 		createKey, err := c.keyClient.CreateKey(ctx, correlationId, key)
 		if err != nil {
@@ -151,7 +139,7 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 			return
 		}
 
-		updateWorker = c.persistence.UpdateWorker(ctx, correlationId, data1Worker.Waiting, data1Worker.NoWork)
+		updateWorker = c.workerPersist.UpdateWorker(ctx, correlationId, data1Worker.Waiting, data1Worker.NoWork)
 		if updateWorker.Id == "" {
 			return
 		}
@@ -164,20 +152,17 @@ func (c *WorkerController) Start(ctx context.Context, correlationId string) (sta
 }
 
 func (c *WorkerController) GetWorkAlias(ctx context.Context, correlationId string) (alias string, err error) {
-	status := c.persistence.GetWorkAlias(ctx, correlationId)
+	status := c.workerPersist.GetWorkAlias(ctx, correlationId)
 	return status, err
 }
 
 func (c *WorkerController) GetStatus(ctx context.Context, correlationId string) (status string, err error) {
-	status = c.persistence.GetStatus(ctx, correlationId)
+	status = c.workerPersist.GetStatus(ctx, correlationId)
 	return status, err
 }
 
 func (c *WorkerController) Stop(ctx context.Context, correlationId string) (status string, err error) {
 	c.timer.Stop(ctx)
-
-	c.jobClient.Open(ctx, correlationId)
-	defer c.jobClient.Close(ctx, correlationId)
 
 	// если есть job progress, то ставим not_started
 	page, err := c.jobClient.GetJobsByStatus(ctx, correlationId, data1.Progress)
@@ -185,7 +170,7 @@ func (c *WorkerController) Stop(ctx context.Context, correlationId string) (stat
 		c.jobClient.UpdateInNotStarted(ctx, correlationId, item.Id, item.Owner)
 	}
 
-	updateWorker := c.persistence.UpdateWorker(ctx, correlationId, data1Worker.Stop, data1Worker.NoWork)
+	updateWorker := c.workerPersist.UpdateWorker(ctx, correlationId, data1Worker.Stop, data1Worker.NoWork)
 
 	return fmt.Sprintf("worker №%s stop", updateWorker.Id), err
 }
